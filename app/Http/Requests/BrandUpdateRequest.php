@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class BrandUpdateRequest extends FormRequest
 {
 
     protected $requried='required |';
@@ -28,14 +28,14 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'category'=>'required||max:25',
+            'uBrand'=>'required||max:25',
         ];
     }
-
-    public function messages(){
-        return [
-            'category.required' => 'Brand name should be provided!',
-            'category.max' => 'Brand name should not be grater than 45 charats!',
+    public function messages()
+    {
+        return[
+            'uBrand.required' => 'Brand name should be provided!',
+            'uBrand.max' => 'Brand name should not be grater than 45 charats!',
         ];
     }
 
@@ -54,7 +54,7 @@ class CategoryRequest extends FormRequest
     }
 
     public function brandAvailable(){
-        if(Category::where('category_name',$this->category)->first()){
+        if(Category::where('category_name',$this->uBrand)->where('idcategory','!=',$this->hiddenID)->first()){
             return true;
         }else{
             return false;
