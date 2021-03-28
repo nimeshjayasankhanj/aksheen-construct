@@ -50,7 +50,7 @@
                                         <a href="{{ URL::asset('/on-going-constructions')}}"><span>On-Going Constructions</span></a>
                                     </li>
                                     <li>
-                                        <a href="{{ URL::asset('/brand')}}"><span>Complated Constructions</span></a>
+                                        <a href="{{ URL::asset('/completed-constructions')}}"><span>Completed Constructions</span></a>
                                     </li>
 
                                 </ul>
@@ -73,6 +73,17 @@
 
                                 </ul>
                             </li>
+
+                            <li class="menu-title">CUSTOMERS </li>
+                            <li>
+                                <a href="customers" class="waves-effect"><i class="fa fa-user"></i><span>Customers</span></a>
+                            </li>
+
+                            <li class="menu-title">EMPLOYEES </li>
+                            <li>
+                                <a href="employees" class="waves-effect"><i class="fa fa-user"></i><span>Employees</span></a>
+                            </li>
+
                             <li class="menu-title">SUPPLIER </li>
                             <li>
                                 <a href="suppliers" class="waves-effect"><i class="fa fa-user"></i><span>Suppliers</span></a>

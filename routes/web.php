@@ -69,7 +69,24 @@ Route::group(['middleware' => 'auth', 'prefix' => ''], function () {
     Route::post('/saveConEmployee', 'ConstructionController@saveConEmployee')->name('saveConEmployee');
     Route::post('/viewEmployees', 'ConstructionController@viewEmployees')->name('viewEmployees');
     Route::post('/deleteEmployee', 'ConstructionController@deleteEmployee')->name('deleteEmployee');
+    Route::post('/savePayment', 'ConstructionController@savePayment')->name('savePayment');
+    Route::post('/paymentHistory', 'ConstructionController@paymentHistory')->name('paymentHistory');
+    Route::get('/completed-constructions', 'ConstructionController@completedConstructionsIndex')->name('completed-constructions');
+    Route::post('/completedConstruction', 'ConstructionController@completedConstruction')->name('completedConstruction');
 
+    //customers
+    Route::get('/customers', 'CustomerController@customersIndex')->name('customers');
+    Route::post('/saveCustomer', 'CustomerController@store')->name('saveCustomer');
+    Route::post('/getCustomerById', 'CustomerController@getById')->name('getCustomerById');
+    Route::post('/updateCustomer', 'CustomerController@update')->name('updateCustomer');
+    Route::post('/viewCustomer', 'CustomerController@viewCustomer')->name('viewCustomer');
+
+    //employee
+    Route::get('/employees', 'EmployeeController@employeesIndex')->name('employees');
+    Route::post('/saveEmployee', 'EmployeeController@store')->name('saveEmployee');
+    Route::post('/getEmployeeById', 'EmployeeController@getById')->name('getEmployeeById');
+    Route::post('/updateEmployee', 'EmployeeController@update')->name('updateEmployee');
+    Route::post('/viewEmployee', 'EmployeeController@viewEmployee')->name('viewEmployee');
 
 
 

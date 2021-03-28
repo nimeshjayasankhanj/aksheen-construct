@@ -43,7 +43,7 @@
         <div class="col-lg-12">
             <div class="card m-b-20">
                 <div class="card-body">
-                    <form action="{{ route('pending-constructions') }}" method="get">
+                    <form action="{{ route('completed-constructions') }}" method="get">
 
                         <div class="row">
                             {{ csrf_field() }}
@@ -145,24 +145,14 @@
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                             <a href="#" class="dropdown-item" data-toggle="modal"
                                                                 data-id="{{ $constructionDetail->idmaster_construction }}"
-                                                                id="employeeId" data-target="#addEmployeeModal">Add
+                                                                id="employeeId" data-target="#addEmployeeModal">View
                                                                 Employees</i>
                                                             </a>
-                                                            @if ($constructionDetail->total != $constructionDetail->paid_amount)
-                                                                <a href="#" class="dropdown-item" data-toggle="modal"
-                                                                    data-id="{{ $constructionDetail->idmaster_construction }}"
-                                                                    id="paymentId" data-target="#addPaymentModal">Add
-                                                                    Payment</i>
-                                                                </a>
-                                                            @endif
+
                                                             <a href="#" class="dropdown-item" data-toggle="modal"
                                                                 data-id="{{ $constructionDetail->idmaster_construction }}"
-                                                                id="paymentHistoryId"
-                                                                data-target="#paymentHistoryModal">Payments
+                                                                id="paymentHistoryId" data-target="#paymentHistoryModal">Payments
                                                                 History</i>
-                                                            </a>
-                                                            <a href="#" class="dropdown-item" data-toggle="modal"
-                                                                onclick="completedProduct({{ $constructionDetail->idmaster_construction }})">Completed</i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -187,43 +177,13 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mt-0">Add Employee</h5>
+                <h5 class="modal-title mt-0">View Employees</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
                 </button>
             </div>
             <div class="modal-body">
 
-                <div class="row">
-                    <div class="col-lg-8">
 
-                        <label>Employee<span style="color: red"> *</span></label>
-                        <div class="form-group">
-                            <select class="form-control select2 tab" name="employee" id="employee">
-                                <option value="" disabled selected>Select Employee
-                                </option>
-                                @if (isset($employees))
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ "$employee->iduser" }}">
-                                            {{ $employee->first_name }} {{ $employee->last_name }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select>
-                            <small class="text-danger" id="EmployeeError"></small>
-                        </div>
-                    </div>
-                    <input type="hidden" id="hiddenConId" name="hiddenConId" />
-                    <div class="col-lg-4" style="padding-top: 23px">
-                        <button type="submit" class="btn btn-md btn-outline-primary waves-effect" id="saveEmployee"
-                            style="border-radius: 24px" onclick="saveEMployee()">
-                            Save Employee</button>
-
-                        <button type="submit" class="btn btn-md btn-outline-primary waves-effect" id="waitEmpButton"
-                            style="border-radius: 24px;display: none">
-                            <i class="fa fa-circle-o-notch fa-spin"></i> Plsease Wait</button>
-
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
 
@@ -350,55 +310,6 @@
         }, function(data) {
             $("#employeeArea").html(data)
         })
-    }
-
-    function completedProduct(id) {
-
-        swal({
-                title: 'Do you really want to mark as completed this project ?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Completed!',
-                cancelButtonText: 'No, cancel!',
-                confirmButtonClass: 'btn btn-md btn-outline-primary waves-effect',
-                cancelButtonClass: 'btn btn-md btn-outline-danger waves-effect',
-                buttonsStyling: false
-            }).then(function() {
-                $.ajax({
-
-                    type: 'POST',
-
-                    url: " {{ route('completedConstruction') }}",
-
-                    data: {
-                        id: id
-                    },
-
-                    success: function(data) {
-
-                        notify({
-                            type: "success", //alert | success | error | warning | info
-                            title: 'CONSTRUCTION COMPLETED',
-                            autoHide: true, //true | false
-                            delay: 2500, //number ms
-                            position: {
-                                x: "right",
-                                y: "top"
-                            },
-                            icon: '<img src="{{ URL::asset('assets/images/correct.png') }}" />',
-
-                            message: data.success,
-                        });
-                        location.reload();
-                    }
-                })
-
-
-            }),
-            function() {
-
-            }
-
     }
 
     function approvedConstruction(id) {
@@ -540,64 +451,18 @@
         $("#hiddenConId").val(constructionId);
     });
 
-    function savePayment() {
 
-        $("#waitPAymentButton").show();
-        $("#savePaymentBtn").hide();
-
-        $("#paymentError").html('');
-        var payment = $("#payment").val();
-        var hiddenConId = $("#hiddenConId").val();
-
-        $.post('savePayment', {
-            payment: payment,
-            hiddenConId: hiddenConId
-        }, function(data) {
-            if (data.errors != null) {
-
-                $("#waitPAymentButton").hide();
-                $("#savePaymentBtn").show();
-
-                if (data.errors.payment) {
-                    var p = document.payment('paymentError');
-                    p.innerHTML = data.errors.payment;
-
-                }
-
-            }
-            if (data.success != null) {
-
-                notify({
-                    type: "success", //alert | success | error | warning | info
-                    title: 'PAYMENT SAVED',
-                    autoHide: true, //true | false
-                    delay: 2500, //number ms
-                    position: {
-                        x: "right",
-                        y: "top"
-                    },
-                    icon: '<img src="{{ URL::asset('assets/images/correct.png') }}" />',
-
-                    message: data.success,
-                });
-
-                $("#waitPAymentButton").hide();
-                $("#savePaymentBtn").show();
-                location.reload();
-            }
-        })
-
-    }
 
     $(document).on('click', '#paymentHistoryId', function() {
         var constructionId = $(this).data("id");
 
-        $.post('paymentHistory', {
-            constructionId: constructionId
-        }, function(data) {
+        $.post('paymentHistory',{
+            constructionId:constructionId
+        },function(data){
             $("#paymentArea").html(data);
         })
     });
+
 
 </script>
 
